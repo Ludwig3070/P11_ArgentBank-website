@@ -6,7 +6,9 @@ import localImage2 from "../img/icon-money.png";
 import localImage3 from "../img/icon-security.png";
 import Footer from "../components/Footer";
 
+
 function Home() {
+  
   return (
     <>
       <Nav text={"Sign in"}/>

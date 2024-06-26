@@ -7,6 +7,9 @@ const userSlice = createSlice({
     loginReceivedFromLoginForm: false,    
     username: "",
     password: "",
+    token: null,
+    error : null,
+    message : null,    
   },
   reducers: {
     loginRequest: (state, action) => {
@@ -19,10 +22,39 @@ const userSlice = createSlice({
     resetLoginReceivedFromLoginForm: (state) => {
         state.loginReceivedFromLoginForm = false;
     },
+    loginSuccess: (state, action) => {
+      const { token, response } = action.payload;      
+      state.token = action.payload.token;
+      state.authorized = true;
+      state.error = null;
+      state.message = response;
+    },
+    loginFailure: (state, action) => {
+      const { token, response } = action.payload;      
+      state.token = null;
+      state.authorized = false;
+      state.error = action.payload.error;
+      state.message = response;
+    },
+    resetLoginState : (state) => {
+      state.authorized= false
+      state.loginReceivedFromLoginForm= false    
+      state.username= ""
+      state.password= ""
+      state.token= null
+      state.error = null
+      state.message = null      
+    }
   },
 });
 
-export const { loginRequest,resetLoginReceivedFromLoginForm } = userSlice.actions;
+export const { 
+  loginRequest,
+  resetLoginReceivedFromLoginForm,
+  loginFailure,
+  loginSuccess,
+  resetLoginState
+ } = userSlice.actions;
 
 export const store = configureStore({
   reducer: {
