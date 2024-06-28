@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  loginRequest,
-  resetLoginReceivedFromLoginForm,
+  loginRequest,  
   loginFailure,
-  loginSuccess,
+  loginSuccess
 } from "../redux/redux.js";
 import { useNavigate } from "react-router-dom";
 
@@ -17,12 +16,12 @@ function LoginForm() {
   const navigate = useNavigate();
 
   const loginState = useSelector((state) => state.user);
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Commence le chargement
     dispatch(
-      loginRequest({ username, password, loginReceivedFromLoginForm: true })
+      loginRequest({ username, password })
     );
 
     try {
@@ -38,7 +37,7 @@ function LoginForm() {
       });
 
       const data = await response.json();
-
+      
       if (data.body && data.body.token) {
         dispatch(
           loginSuccess({ token: data.body.token, response: data.message })
@@ -55,25 +54,23 @@ function LoginForm() {
           localStorage.removeItem("rememberMe");
         }
       } else {
+        alert(data.message);
         dispatch(
           loginFailure({ error: "Token not found", response: data.message })
         );
-        
       }
     } catch (error) {
       dispatch(
         loginFailure({ error: error.message, response: "Login failed" })
       );
       console.error("Login error: ", error);
-      alert(error)
-    } finally {      
-      setLoading(false); //fin du chargement
+      alert(error.message + "\nTry Again Later");
+    } finally {
+      setLoading(false); // fin du chargement
     }
-    
   };
 
   useEffect(() => {
-    /* dispatch(resetLoginState()); */
     // Charger les informations de connexion depuis le localStorage au chargement de la page
     const storedUsername = localStorage.getItem("username");
     const storedPassword = localStorage.getItem("password");
@@ -84,24 +81,20 @@ function LoginForm() {
       setPassword(storedPassword || "");
       setRememberMe(storedRememberMe);
     }
+    
   }, []);
 
   useEffect(() => {
-    console.log("Login state:", loginState);
-    
-    // Naviguer vers la page d'accueil après le login réussi
+    /* console.log("Login state:", loginState); */
+
+    // Naviguer vers la page utilisateur si autorisé
     if (loginState.authorized) {
-      navigate("/User");
-      // Réinitialiser loginReceivedFromLoginForm à false après la navigation permet quitter la page formulaire
-      dispatch(resetLoginReceivedFromLoginForm());
-    } 
-     // Afficher une alerte en cas d'erreur de connexion
-     if (loginState.error) {
-      alert(loginState.message);
-    }   
+      navigate("/User");     
+    }
   }, [loginState, navigate, dispatch]);
 
   return (
+    
     <form onSubmit={handleSubmit}>
       <div className="input-wrapper">
         <label htmlFor="username">Username</label>
@@ -133,7 +126,6 @@ function LoginForm() {
         <label htmlFor="remember-me">Remember me</label>
       </div>
       <button type="submit" className="sign-in-button">
-        {/* Affichage conditionnel du chargement */}
         {loading ? "Loading..." : "Sign In"}
       </button>
     </form>

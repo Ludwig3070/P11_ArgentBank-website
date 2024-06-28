@@ -1,7 +1,7 @@
 import logo from "../img/argentBankLogo.png";
 import { Link } from "react-router-dom";
 
-function Nav({ text }) {
+function Nav({ text, signOut }) {
   return (
     <nav className="main-nav">
       <Link to="/" className="main-nav-logo">
@@ -12,9 +12,16 @@ function Nav({ text }) {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
-      <Link to="/SignIn" className="main-nav-item">
-        <i className="fa fa-user-circle"></i> {text ? text : "Sign in"}
-      </Link>
+      <div>
+        <Link to="/SignIn" className="main-nav-item">
+          <i className="fa fa-user-circle"></i> {text ? text : "Sign in"}
+        </Link>
+        {signOut && (
+          <Link to="/">
+            <i className="fa fa-sign-out"></i> Sign Out
+          </Link>
+        )}
+      </div>
     </nav>
   );
 }

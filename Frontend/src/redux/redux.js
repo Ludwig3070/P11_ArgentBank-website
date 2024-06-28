@@ -1,63 +1,94 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-
+/* slice user */
 const userSlice = createSlice({
   name: "user",
   initialState: {
     authorized: false,
-    loginReceivedFromLoginForm: false,    
     username: "",
     password: "",
     token: null,
-    error : null,
-    message : null,    
+    error: null,
+    message: null,
   },
   reducers: {
     loginRequest: (state, action) => {
-      const { username, password, loginReceivedFromLoginForm } = action.payload;      
+      const { username, password } = action.payload;
       state.username = username;
       state.password = password;
-      state.loginReceivedFromLoginForm = loginReceivedFromLoginForm;
-    },
-      // Ajouter un reducer pour réinitialiser loginReceivedFromLoginForm à false
-    resetLoginReceivedFromLoginForm: (state) => {
-        state.loginReceivedFromLoginForm = false;
     },
     loginSuccess: (state, action) => {
-      const { token, response } = action.payload;      
-      state.token = action.payload.token;
+      const { token, response } = action.payload;
+      state.token = token;
       state.authorized = true;
       state.error = null;
       state.message = response;
     },
     loginFailure: (state, action) => {
-      const { token, response } = action.payload;      
+      const { error, response } = action.payload;
       state.token = null;
       state.authorized = false;
-      state.error = action.payload.error;
+      state.error = error;
       state.message = response;
     },
-    resetLoginState : (state) => {
-      state.authorized= false
-      state.loginReceivedFromLoginForm= false    
-      state.username= ""
-      state.password= ""
-      state.token= null
-      state.error = null
-      state.message = null      
-    }
+    resetLoginState: (state) => {
+      state.authorized = false;      
+      state.username = "";
+      state.password = "";
+      state.token = null;
+      state.error = null;
+      state.message = null;
+    },
   },
 });
 
-export const { 
-  loginRequest,
-  resetLoginReceivedFromLoginForm,
+export const {
+  loginRequest,  
   loginFailure,
   loginSuccess,
-  resetLoginState
- } = userSlice.actions;
+  resetLoginState,
+} = userSlice.actions;
+
+/* slice profil */
+
+const profilSlice = createSlice({
+  name : "profil",
+  initialState:{
+    email : "",
+    firstName : "",
+    lastName : "",
+    userName : "",
+    createdAt : "",
+    id : ""
+  },
+  reducers:{
+    resetProfil : (state)=>{
+      state.email = "";
+      state.firstName = "";
+      state.lastName = "";
+      state.userName = "";
+      state.createdAt = "";
+      state.id = "";
+    },
+    fillProfil : (state,action)=>{
+      const {email,firstName,lastName,userName,createdAt,id} = action.payload;
+      state.email = email;
+      state.firstName = firstName;
+      state.lastName = lastName;
+      state.userName = userName;
+      state.createdAt = createdAt;
+      state.id = id;
+    }
+  }
+})
+export const {
+  resetProfil,
+  fillProfil,
+} = profilSlice.actions;
+
 
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
+    profil: profilSlice.reducer
   },
 });
