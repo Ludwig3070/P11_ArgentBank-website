@@ -1,47 +1,71 @@
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch  } from "react-redux";
+import usePushUserName from "../hooks/UsePushUserName";
+import { validateUserInfos } from "../redux/redux";
+import { useState,useEffect } from "react";
 
 
 
+export default function FormInfos() {
+  
+  const dispatch = useDispatch();
+  const storedUserName = useSelector((state)=>state.profil.userName) ?? ""; // Fournit une valeur par défaut
+  const [localUserName, setLocalUserName] = useState(storedUserName);// État local pour gérer le userName
+  const firstName = useSelector((state)=>state.profil.firstName)?? ""; // Fournit une valeur par défaut
+  const lastName = useSelector((state)=>state.profil.lastName)?? ""; // Fournit une valeur par défaut 
+  const { loading, userNamePushProfile } = usePushUserName(localUserName); // Utilisation du hook personnalisé
+  
+  useEffect(() => {
+    setLocalUserName(storedUserName);
+  }, [storedUserName]); // Synchronisation de l'état local avec le store
 
-export default function FormInfos(){
-    const userInfos = useSelector((state)=>state.user);
-
-
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    userNamePushProfile(); // Appel de la fonction pour envoyer le nom d'utilisateur au serveur
+  };
+  const handleChange = (e) => {
+    setLocalUserName(e.target.value); // Mise à jour de l'état local du userName
+  };
+ 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="input-wrapper">
-        <label htmlFor="username">Username</label>
+    <form onSubmit={handleSubmit} className="form-infos">
+      <div className="form-infos-div">
+        <label htmlFor="username">UserName:</label>
         <input
           type="text"
           id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
+          value={localUserName}
+          onChange={handleChange} // Ajout de la gestion de changement         
         />
       </div>
-      <div className="input-wrapper">
-        <label htmlFor="password">Password</label>
+      <div className="form-infos-div">
+        <label htmlFor="firstName">First Name:</label>
         <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          type="text"
+          id="firstName"
+          value={firstName}
+          disabled="disabled"
         />
       </div>
-      <div className="input-remember">
-        <input
-          type="checkbox"
-          id="remember-me"
-          checked={rememberMe}
-          onChange={(e) => setRememberMe(e.target.checked)}
-        />
-        <label htmlFor="remember-me">Remember me</label>
+      <div className="form-infos-div">
+        <label htmlFor="lastName">Last Name:</label>
+        <input type="text" id="lastName" value={lastName} disabled="disabled" />
       </div>
-      <button type="submit" className="sign-in-button">
-        {loading ? "Loading..." : "Sign In"}
-      </button>
+      <div>
+        <button 
+        type="submit" 
+        className="edit-button edit-button2" 
+        disabled={loading} // Désactivation du bouton pendant le chargement      
+        >
+          {loading ? "Loading..." : "Save"}
+        </button>
+        <button
+          type="button"
+          className="edit-button edit-button2"
+          onClick={(e) => dispatch(validateUserInfos())}// toggle le flag dans le store
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   );
 }

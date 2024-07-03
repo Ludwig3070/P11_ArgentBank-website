@@ -170,6 +170,7 @@ body {
   border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
+  cursor: pointer;
 }
 
 .sign-in-content {
@@ -264,9 +265,17 @@ body {
   color: #fff;
   font-weight: bold;
   padding: 10px 30px;
+  cursor: pointer; 
 }
 .edit-button2 {
   margin: 0 5px;
+  width: 150px;
+  height: 50px;
+  padding: 0;
+  margin: 10px 3px;
+  border-radius: 3px;
+  font-size: 1.1rem;
+  font-weight: normal;   
 }
 
 .header {
@@ -285,6 +294,18 @@ body {
   background-color: #00bc77;
   color: #fff;
 }
+.form-infos {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+  column-gap: 5px; 
+ }
+ .form-infos-div{
+  display: flex;
+  margin: auto;
+  column-gap: 8px;
+  text-align: left;
+ }
 
 @media (min-width: 720px) {
   .account {
@@ -297,5 +318,15 @@ body {
 
   .transaction-button {
     width: 200px;
+  }
+}
+
+/* Styles spécifiques pour les écrans de 420px et moins */
+@media (max-width: 420px) {
+
+  .div-in-nav {
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
   }
 }

@@ -82,7 +82,7 @@ const profilSlice = createSlice({
     validateUserInfos : (state)=>{
       state.userInfosButton = !state.userInfosButton
     },
-    resetValidateUserInsfos : (state)=>{
+    resetValidateUserInfos : (state)=>{
       state.userInfosButton = "false"
     }
   }
@@ -93,7 +93,7 @@ export const {
   resetProfil,
   fillProfil,
   validateUserInfos,
-  resetValidateUserInsfos
+  resetValidateUserInfos
 } = profilSlice.actions;
 
 

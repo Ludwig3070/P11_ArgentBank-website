@@ -1,19 +1,18 @@
 import logo from "../img/argentBankLogo.png";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetLoginState, resetProfil,resetValidateUserInsfos } from "../redux/redux";
+import { resetLoginState, resetProfil,resetValidateUserInfos } from "../redux/redux";
 
 function Nav({ text, signOut }) {
-  const dispatch = useDispatch();
-  const loginState = useSelector((state) => state.user);
-  const profilState = useSelector((state) => state.profil);
+  const dispatch = useDispatch();  
 
   const handleClick = () => {
     dispatch(resetLoginState());
     dispatch(resetProfil());
-    dispatch(resetValidateUserInsfos());
-
+    dispatch(resetValidateUserInfos());
   };
+
+  const handleUser = () => {console.log("YES")}
 
   return (
     <nav className="main-nav">
@@ -25,9 +24,9 @@ function Nav({ text, signOut }) {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
-      <div>
-        <Link to="/SignIn" className="main-nav-item">
-          <i className="fa fa-user-circle"></i> {text ? text : "Sign in"}
+      <div className="div-in-nav">
+        <Link to="/SignIn" className="main-nav-item" >
+          <i className="fa fa-user-circle"></i> {text ? text : "Sign in"} {text ? handleUser() : null}
         </Link>
         {signOut && (
           <Link to="/" onClick={handleClick}>

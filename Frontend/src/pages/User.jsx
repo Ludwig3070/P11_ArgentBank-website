@@ -4,22 +4,22 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { useSelector, useDispatch } from "react-redux";
 import useProfile from "../hooks/UseProfile";
-import { validateUserInfos,resetValidateUserInsfos } from "../redux/redux";
+import { validateUserInfos, resetValidateUserInsfos } from "../redux/redux";
+import FormInfos from "../components/FormInfos";
+
 
 function User() {
   const profilState = useSelector((state) => state.profil);
   const { loading, userProfile } = useProfile();
   const dispatch = useDispatch();
-  const userInfosButton = useSelector((state) => state.profil.userInfosButton);  
+  const userInfosButton = useSelector((state) => state.profil.userInfosButton);
   const handleButtonClick = () => {
     dispatch(validateUserInfos());
   };
   useEffect(() => {
-    userProfile();
+    userProfile();    
     // eslint-disable-next-line
   }, []);
- 
- 
 
   if (loading) {
     return <div>Loading...</div>;
@@ -46,21 +46,10 @@ function User() {
         )}
         {!userInfosButton && (
           <div className="header">
-            <h1>
-              Edit user Info
-              <br />
-              
-            </h1>
-            <button className="edit-button" onClick={handleButtonClick}>
-              Save
-            </button>
-            <button className="edit-button edit-button2" onClick={handleButtonClick}>
-              Cancel
-            </button>
+            <h1>Edit user Info</h1>            
+            <FormInfos />            
           </div>
         )}
-
-
 
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
