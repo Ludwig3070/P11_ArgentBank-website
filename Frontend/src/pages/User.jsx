@@ -2,28 +2,29 @@
 import React, { useEffect } from "react";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
-import { useSelector } from "react-redux";
-import useProfile from "../hooks/UseProfile"; 
+import { useSelector, useDispatch } from "react-redux";
+import useProfile from "../hooks/UseProfile";
+import { validateUserInfos,resetValidateUserInsfos } from "../redux/redux";
 
-console.log("///////////",useProfile);
 function User() {
-  const profilState = useSelector((state) => state.profil);  
+  const profilState = useSelector((state) => state.profil);
   const { loading, userProfile } = useProfile();
-
-
+  const dispatch = useDispatch();
+  const userInfosButton = useSelector((state) => state.profil.userInfosButton);  
+  const handleButtonClick = () => {
+    dispatch(validateUserInfos());
+  };
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     userProfile();
+    // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    console.log("profilState=", profilState);
-  }, [profilState]);
+ 
+ 
 
   if (loading) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <>
       <Nav
@@ -31,14 +32,36 @@ function User() {
         signOut={true}
       />
       <main className="main bg-dark">
-        <div className="header">
-          <h1>
-            Welcome back
-            <br />
-            {profilState.firstName || ""} {profilState.lastName || ""}!
-          </h1>
-          <button className="edit-button">Edit Name</button>
-        </div>
+        {userInfosButton && (
+          <div className="header">
+            <h1>
+              Welcome back
+              <br />
+              {profilState.firstName || ""} {profilState.lastName || ""}!
+            </h1>
+            <button className="edit-button" onClick={handleButtonClick}>
+              Edit Name
+            </button>
+          </div>
+        )}
+        {!userInfosButton && (
+          <div className="header">
+            <h1>
+              Edit user Info
+              <br />
+              
+            </h1>
+            <button className="edit-button" onClick={handleButtonClick}>
+              Save
+            </button>
+            <button className="edit-button edit-button2" onClick={handleButtonClick}>
+              Cancel
+            </button>
+          </div>
+        )}
+
+
+
         <h2 className="sr-only">Accounts</h2>
         <section className="account">
           <div className="account-content-wrapper">

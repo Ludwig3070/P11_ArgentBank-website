@@ -13,7 +13,6 @@ export default function useProfile() {
   // eslint-disable-next-line
   const userProfile = async () => {
     setLoading(true); // Mise à jour de l'état 'loading' à true pour indiquer le début du chargement
-    console.log('verif')
     if (loginState.token) {
       try {
         const response = await fetch(
@@ -46,11 +45,10 @@ export default function useProfile() {
       } finally {
         setLoading(false);
       }
-    } else {      
+    } else {
       setLoading(false);
       navigate("/");
-    }    
+    }
   };
   return { loading, userProfile };
 }
-

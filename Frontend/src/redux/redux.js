@@ -58,7 +58,8 @@ const profilSlice = createSlice({
     lastName : "",
     userName : "",
     createdAt : "",
-    id : ""
+    id : "",
+    userInfosButton : "false"
   },
   reducers:{
     resetProfil : (state)=>{
@@ -77,12 +78,22 @@ const profilSlice = createSlice({
       state.userName = userName;
       state.createdAt = createdAt;
       state.id = id;
+    },
+    validateUserInfos : (state)=>{
+      state.userInfosButton = !state.userInfosButton
+    },
+    resetValidateUserInsfos : (state)=>{
+      state.userInfosButton = "false"
     }
   }
 })
+
+
 export const {
   resetProfil,
   fillProfil,
+  validateUserInfos,
+  resetValidateUserInsfos
 } = profilSlice.actions;
 
 

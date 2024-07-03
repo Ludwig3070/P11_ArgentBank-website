@@ -1,7 +1,7 @@
 import logo from "../img/argentBankLogo.png";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { resetLoginState, resetProfil } from "../redux/redux";
+import { resetLoginState, resetProfil,resetValidateUserInsfos } from "../redux/redux";
 
 function Nav({ text, signOut }) {
   const dispatch = useDispatch();
@@ -11,6 +11,8 @@ function Nav({ text, signOut }) {
   const handleClick = () => {
     dispatch(resetLoginState());
     dispatch(resetProfil());
+    dispatch(resetValidateUserInsfos());
+
   };
 
   return (
