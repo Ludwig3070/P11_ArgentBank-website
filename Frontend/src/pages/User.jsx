@@ -4,7 +4,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { useSelector, useDispatch } from "react-redux";
 import useProfile from "../hooks/UseProfile";
-import { validateUserInfos, resetValidateUserInsfos } from "../redux/redux";
+import { validateUserInfos } from "../redux/redux";
 import FormInfos from "../components/FormInfos";
 
 
