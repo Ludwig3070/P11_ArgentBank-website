@@ -1,4 +1,4 @@
-import logo from "../img/argentBankLogo.png";
+import logo from "../img/freecompress-argentBankLogo.webp";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { resetLoginState, resetProfil,resetValidateUserInfos } from "../redux/redux";

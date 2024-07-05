@@ -1,9 +1,9 @@
 import Nav from "../components/Nav";
 import Banner from "../components/Banner";
 import FeatureItem from "../components/FeatureItem";
-import localImage1 from "../img/icon-chat.png";
-import localImage2 from "../img/icon-money.png";
-import localImage3 from "../img/icon-security.png";
+import localImage1 from "../img/freecompress-icon-chat.webp";
+import localImage2 from "../img/freecompress-icon-money.webp";
+import localImage3 from "../img/freecompress-icon-security.webp";
 import Footer from "../components/Footer";
 
 
