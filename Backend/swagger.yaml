@@ -110,7 +110,7 @@ paths:
         '500':
           description: Internal Server Error
   /user/transactions:
-    post:
+    get:
       security:
         - Bearer: []
       tags:
@@ -243,10 +243,10 @@ definitions:
         description: Type of transaction (e.g., electronic, cheque)
       category:
         type: string
-        description: Category of the transaction (e.g., food)
+        description: Category of the transaction (e.g., food). Can be modified.
       note:
         type: string
-        description: Note for the transaction, empty by default
+        description: Note for the transaction, empty by default. Can be modified.
   TransactionsResponse:
     type: object
     properties:
@@ -255,9 +255,10 @@ definitions:
       message:
         type: string
       body:
-        type: array
+        type: array  # Changement ici: type object -> array
         items:
           $ref: '#/definitions/Transaction'
+        description: "List of banking transactions carried out during the month. Each element is an object and represents a transaction."  # Description modifiée pour plus de clarté
   TransactionAnnotation:
     type: object
     properties:
@@ -269,3 +270,4 @@ definitions:
         type: string
     required:
       - id
+    description: "The category and note fields are optional. Only those present in the body will be modified on the server. The id is the id of the transaction to modify."  # Description clarifiée
