@@ -20,10 +20,15 @@ export default function FormInfos() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (localUserName.trim() === "") {
+      alert("UserName cannot be empty");
+      return;
+    }
     userNamePushProfile(); // Appel de la fonction pour envoyer le nom d'utilisateur au serveur
   };
   const handleChange = (e) => {
     setLocalUserName(e.target.value); // Mise à jour de l'état local du userName
+    console.log("///////////localUserName:", localUserName)
   };
  
   return (

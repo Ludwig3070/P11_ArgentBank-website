@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { fillProfil } from "../redux/redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function useProfile() {
@@ -8,9 +8,13 @@ export default function useProfile() {
   const dispatch = useDispatch(); // Initialisation de la fonction dispatch de Redux
   const navigate = useNavigate();
   const loginState = useSelector((state) => state.user);
+  const profilState = useSelector((state) => state.profil);
+
+  useEffect(() => {
+    console.log("profilState has changed:", profilState);
+  }, [profilState]);
 
   // Fonction de connexion asynchrone
-  // eslint-disable-next-line
   const userProfile = async () => {
     setLoading(true); // Mise à jour de l'état 'loading' à true pour indiquer le début du chargement
     if (loginState.token) {
@@ -40,15 +44,15 @@ export default function useProfile() {
         }
       } catch (error) {
         alert(error.message + "\nTry Again Later");
-        setLoading(false);
-        navigate("/");
+        navigate("/"); // Rediriger l'utilisateur après l'alerte
       } finally {
         setLoading(false);
       }
     } else {
       setLoading(false);
-      navigate("/");
+      /* navigate("/"); */
     }
   };
+
   return { loading, userProfile };
 }

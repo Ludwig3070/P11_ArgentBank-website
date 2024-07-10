@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  title: Bank Argent API documentation
+  title: Bank Argent API Documentation
   description: Contains all available API endpoints in this codebase
   version: '1.0.0'
   termsOfService: 'http://swagger.io/terms/'
@@ -29,10 +29,14 @@ paths:
           description: Login Successfully
           schema:
             $ref: '#/definitions/LoginResponse'
+          examples:
+            application/json:
+              token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         '400':
-          description: Invalid Fields
+          description: Invalid Fields - One or more fields are incorrect.
         '500':
-          description: Internal Server Error
+          description: Internal Server Error - An error occurred on the server.
+
   /user/signup:
     post:
       tags:
@@ -54,16 +58,17 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
-          description: Invalid Fields
+          description: Invalid Fields - One or more fields are missing or incorrect.
         '500':
-          description: Internal Server Error
+          description: Internal Server Error - An error occurred on the server.
+
   /user/profile:
     post:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
+      summary: Fetch User Profile
       description: API for fetching a user profile
       produces:
         - application/json
@@ -73,19 +78,19 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
-          description: Invalid Fields
+          description: Invalid Fields - The request parameters are incorrect.
         '401':
-          description: Unauthorized
+          description: Unauthorized - Authentication failed.
         '403':
-          description: Forbidden
+          description: Forbidden - You do not have permission to access this resource.
         '500':
-          description: Internal Server Error
+          description: Internal Server Error - An error occurred on the server.
     put:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Profile API
+      summary: Update User Profile
       description: API for updating a user profile
       parameters:
         - in: body
@@ -102,20 +107,27 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
-          description: Invalid Fields
+          description: Invalid Fields - The request parameters are incorrect.
         '401':
-          description: Unauthorized
+          description: Unauthorized - Authentication failed.
         '403':
-          description: Forbidden
+          description: Forbidden - You do not have permission to access this resource.
         '500':
-          description: Internal Server Error
-  /user/transactions:
+          description: Internal Server Error - An error occurred on the server.
+
+  /user/transaction/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+        description: The transaction ID
     get:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Transactions API
+      summary: Fetch User Transactions
       description: API for fetching transactions for a month
       produces:
         - application/json
@@ -125,21 +137,26 @@ paths:
           schema:
             $ref: '#/definitions/TransactionsResponse'
         '400':
-          description: Invalid Fields
+          description: Invalid Fields - The request parameters are incorrect.
         '401':
-          description: Unauthorized
+          description: Unauthorized - Authentication failed.
         '403':
-          description: Forbidden
+          description: Forbidden - You do not have permission to access this resource.
         '500':
-          description: Internal Server Error
+          description: Internal Server Error - An error occurred on the server.
     put:
       security:
         - Bearer: []
       tags:
         - User Module
-      summary: User Transactions API
+      summary: Update User Transaction
       description: API for updating a transaction with a Note or/and a Category
       parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: The transaction ID
         - in: body
           name: body
           description: Update user transaction attributes
@@ -154,13 +171,14 @@ paths:
           schema:
             $ref: '#/definitions/TransactionsResponse'
         '400':
-          description: Invalid Fields
+          description: Invalid Fields - The request parameters are incorrect.
         '401':
-          description: Unauthorized
+          description: Unauthorized - Authentication failed.
         '403':
-          description: Forbidden
+          description: Forbidden - You do not have permission to access this resource.
         '500':
-          description: Internal Server Error
+          description: Internal Server Error - An error occurred on the server.
+
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -170,31 +188,39 @@ securityDefinitions:
 definitions:
   User:
     type: object
+    required:
+      - email
+      - password
     properties:
       email:
         type: string
-        description: user email
+        description: User email
       password:
         type: string
-        description: user password
+        description: User password
       firstName:
         type: string
-        description: user first name
+        description: User first name
       lastName:
         type: string
-        description: user last name
+        description: User last name
       userName:
         type: string
-        description: user public name
+        description: User public name
+
   Login:
     type: object
+    required:
+      - email
+      - password
     properties:
       email:
         type: string
-        description: user email
+        description: User email
       password:
         type: string
-        description: user password
+        description: User password
+
   ApiResponse:
     type: object
     properties:
@@ -209,16 +235,19 @@ definitions:
             type: string
           email:
             type: string
+
   LoginResponse:
     type: object
     properties:
       token:
         type: string
+
   UserProfile:
     type: object
     properties:
       userName:
         type: string
+
   Transaction:
     type: object
     properties:
@@ -247,6 +276,7 @@ definitions:
       note:
         type: string
         description: Note for the transaction, empty by default. Can be modified.
+
   TransactionsResponse:
     type: object
     properties:
@@ -255,10 +285,11 @@ definitions:
       message:
         type: string
       body:
-        type: array  # Changement ici: type object -> array
+        type: array
         items:
           $ref: '#/definitions/Transaction'
-        description: "List of banking transactions carried out during the month. Each element is an object and represents a transaction."  # Description modifiée pour plus de clarté
+        description: "List of banking transactions carried out during the month. Each element is an object and represents a transaction."
+
   TransactionAnnotation:
     type: object
     properties:
@@ -270,4 +301,4 @@ definitions:
         type: string
     required:
       - id
-    description: "The category and note fields are optional. Only those present in the body will be modified on the server. The id is the id of the transaction to modify."  # Description clarifiée
+    description: "The category and note fields are optional. Only those present in the body will be modified on the server. The id is the id of the transaction to modify."

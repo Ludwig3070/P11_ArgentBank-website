@@ -1,4 +1,3 @@
-// User.jsx
 import React, { useEffect } from "react";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -7,19 +6,20 @@ import useProfile from "../hooks/UseProfile";
 import { validateUserInfos } from "../redux/redux";
 import FormInfos from "../components/FormInfos";
 
-
 function User() {
   const profilState = useSelector((state) => state.profil);
   const { loading, userProfile } = useProfile();
   const dispatch = useDispatch();
   const userInfosButton = useSelector((state) => state.profil.userInfosButton);
+
+  useEffect(() => {
+    userProfile();
+    // eslint-disable-next-line
+  }, []);
+
   const handleButtonClick = () => {
     dispatch(validateUserInfos());
   };
-  useEffect(() => {
-    userProfile();    
-    // eslint-disable-next-line
-  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -27,12 +27,19 @@ function User() {
 
   return (
     <>
-      <Nav
-        text={profilState.firstName ? profilState.firstName : "Hello"}
-        signOut={true}
-      />
+      {userInfosButton ? (
+        <Nav
+          text={profilState.firstName ? profilState.firstName : "Hello"}
+          signOut={true}
+        />
+      ) : (
+        <Nav
+          text={profilState.userName ? profilState.userName : "Hello"}
+          signOut={true}
+        />
+      )}
       <main className="main bg-dark">
-        {userInfosButton && (
+        {userInfosButton ? (
           <div className="header">
             <h1>
               Welcome back
@@ -43,11 +50,10 @@ function User() {
               Edit Name
             </button>
           </div>
-        )}
-        {!userInfosButton && (
+        ) : (
           <div className="header">
-            <h1>Edit user Info</h1>            
-            <FormInfos />            
+            <h1>Edit user Info</h1>
+            <FormInfos />
           </div>
         )}
 
